@@ -84,28 +84,29 @@ function cadastrar(event) {
   const senha = document.getElementById('senha').value;
   const cep = document.getElementById('cep').value;
   const endereco = document.getElementById('Endereço').value;
+  const numero = document.getElementById('Número').value;
   const bairro = document.getElementById('Bairro').value; 
   const cidade = document.getElementById('Cidade').value;
   const estado = document.getElementById('Estado').value;
 
 
-  if (!nome || !email || !senha || !cep || !endereco || !bairro || !cidade || !estado) {
+  if (!nome || !email || !senha || !cep || !endereco || !numero || !bairro || !cidade || !estado) {
     Swal.fire({
-      icon: 'error!',
+      icon: 'error',
       title: 'Campos obrigatórios',
       text: 'Por favor, preencha todos os campos obrigatórios.'
     });
     return;
   }
 
-  const funcionarios = {nome, email, senha, cep, endereco, bairro, cidade, estado};
+  const funcionarios = {nome, email, senha, cep, endereco, numero, bairro, cidade, estado};
   
-    fetch('http://localhost:3000/funcionarios', {
+    fetch('http://localhost:8080/api/funcionarios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(Funcionarios)
+      body: JSON.stringify(funcionarios)
     })
     .then(res => res.json())
     .then(data => {
@@ -114,11 +115,15 @@ function cadastrar(event) {
         title: 'Funcionário cadastrado com sucesso!',
         text: `ID do funcionário: ${data.id}`
       });
-      document.getElementById('formFuncionario').reset(); 
+      document.getElementById('formCadastro').reset();
+
     })
     .catch(error => {
       console.error("Erro ao cadastrar funcionário:", error);
       Swal.fire('Erro','Ocorreu um erro ao cadastrar o funcionário. Por favor, tente novamente.','error');
       });
   }
+  document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('formCadastro').addEventListener('submit', cadastrar);
+});
 
